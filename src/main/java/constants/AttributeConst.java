@@ -11,9 +11,7 @@ public enum AttributeConst {
     ERR("errors"),
 
     LOGIN_EMP("login_employee"),
-
     LOGIN_ERR("loginError"),
-
     EMPLOYEE("employee"),
     EMPLOYEES("employees"),
     EMP_COUNT("employees_count"),
@@ -21,7 +19,7 @@ public enum AttributeConst {
     EMP_CODE("code"),
     EMP_PASS("password"),
     EMP_NAME("name"),
-    EMP_ADMIN_FLG("admin_flg"),
+    EMP_ADMIN_FLG("admin_flag"),
 
     ROLE_ADMIN(1),
     ROLE_GENERAL(0),
@@ -49,6 +47,7 @@ public enum AttributeConst {
         this.text = null;
         this.i = i;
     }
+
     public String getValue() {
         return this.text;
     }
@@ -56,4 +55,5 @@ public enum AttributeConst {
     public Integer getIntegerValue() {
         return this.i;
     }
+
 }

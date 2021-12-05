@@ -22,6 +22,7 @@ public interface JpaConst {
     int EMP_DEL_TRUE = 1;
     int EMP_DEL_FALSE = 0;
 
+
     String TABLE_REP = "reports";
 
     String REP_COL_ID = "id";
@@ -45,7 +46,7 @@ public interface JpaConst {
     String Q_EMP_COUNT = ENTITY_EMP + ".count";
     String Q_EMP_COUNT_DEF = "SELECT COUNT(e) FROM Employee AS e";
 
-    String Q_EMP_GET_BY_CODE_AND_PASS = ENTITY_EMP + "getByCodeAndPass";
+    String Q_EMP_GET_BY_CODE_AND_PASS = ENTITY_EMP + ".getByCodeAndPass";
     String Q_EMP_GET_BY_CODE_AND_PASS_DEF = "SELECT e FROM Employee AS e WHERE e.deleteFlag = 0 AND e.code = :" + JPQL_PARM_CODE + " AND e.password = :" + JPQL_PARM_PASSWORD;
 
     String Q_EMP_COUNT_RESISTERED_BY_CODE = ENTITY_EMP + ".countRegisteredByCode";
@@ -62,6 +63,5 @@ public interface JpaConst {
 
     String Q_REP_COUNT_ALL_MINE = ENTITY_REP + ".countAllMine";
     String Q_REP_COUNT_ALL_MINE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE;
-
 
 }
