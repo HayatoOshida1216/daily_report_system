@@ -12,7 +12,7 @@ import models.Employee;
 import models.validators.EmployeeValidator;
 import utils.EncryptUtil;
 
-public class EmployeeService extends ServiceBace {
+public class EmployeeService extends ServiceBase {
 
     public List<EmployeeView> getPerPage(int page){
         List<Employee> employees = em.createNamedQuery(JpaConst.Q_EMP_GET_ALL, Employee.class)
@@ -31,13 +31,13 @@ public class EmployeeService extends ServiceBace {
     public EmployeeView findOne(String code, String plainPass, String pepper) {
         Employee e = null;
         try {
-            String pass = EncrptUtil.getPasswordEncrypt(plainPass, pepper);
+            String pass = EncryptUtil.getPasswordEncrypt(plainPass, pepper);
 
             e = em.createNamedQuery(JpaConst.Q_EMP_GET_BY_CODE_AND_PASS, Employee.class)
                     .setParameter(JpaConst.JPQL_PARM_CODE, code)
                     .setParameter(JpaConst.JPQL_PARM_PASSWORD, pass)
                     .getSingleResult();
-        } catch(NoResultException e) {
+        } catch(NoResultException ex) {
 
         }
         return EmployeeConverter.toView(e);

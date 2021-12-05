@@ -35,7 +35,7 @@ public class PropertiesListener implements ServletContextListener {
     /**
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
-    public void contextInitialized(ServletContextEvent sce)  {
+    public void contextInitialized(ServletContextEvent arg0)  {
         ServletContext context = arg0.getServletContext();
         try {
             InputStream is = PropertiesListener.class.getClassLoader().getResourceAsStream("application.properties");
