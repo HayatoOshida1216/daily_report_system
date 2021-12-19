@@ -33,7 +33,13 @@ public enum AttributeConst {
     REP_ID("id"),
     REP_DATE("report_date"),
     REP_TITLE("title"),
-    REP_CONTENT("content");
+    REP_CONTENT("content"),
+
+    FAVORITE("favorite"),
+    FAVORITES("favorites"),
+    FAV_COUNT("favorites_count"),
+    FAV_ID("id"),
+    FAV_USER("favorite_user");
 
     private final String text;
     private final Integer i;

@@ -11,9 +11,9 @@ import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
 import services.ReportService;
-
 public class TopAction extends ActionBase{
     private ReportService service;
+
 
     public void process() throws ServletException, IOException{
         service = new ReportService();
@@ -30,8 +30,10 @@ public class TopAction extends ActionBase{
 
         long myReportsCount = service.countAllMine(loginEmployee);
 
+
         putRequestScope(AttributeConst.REPORTS, reports);
         putRequestScope(AttributeConst.REP_COUNT, myReportsCount);
+
         putRequestScope(AttributeConst.PAGE, page);
         putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE);
 

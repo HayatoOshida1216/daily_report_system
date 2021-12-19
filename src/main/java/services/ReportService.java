@@ -5,9 +5,12 @@ import java.util.List;
 
 import actions.views.EmployeeConverter;
 import actions.views.EmployeeView;
+import actions.views.FavoriteConverter;
+import actions.views.FavoriteView;
 import actions.views.ReportConverter;
 import actions.views.ReportView;
 import constants.JpaConst;
+import models.Favorite;
 import models.Report;
 import models.validators.ReportValidator;
 
@@ -29,6 +32,26 @@ public class ReportService extends ServiceBase{
 
        return count;
    }
+   public long countAllFavorites(ReportView report) {
+       long count = (long) em.createNamedQuery(JpaConst.Q_FAV_COUNT_ALL_REP,Long.class)
+               .setParameter(JpaConst.JPQL_PARM_REPORT, ReportConverter.toModel(report))
+               .getSingleResult();
+       return count;
+   }
+   public long countFavoriteUser(EmployeeView employee, ReportView report) {
+
+       long count = (long) em.createNamedQuery(JpaConst.Q_FAV_COUNT_ALL_FAV,Long.class)
+               .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(employee))
+               .setParameter(JpaConst.JPQL_PARM_REPORT, ReportConverter.toModel(report))
+               .getSingleResult();
+       return count;
+   }
+   public List<FavoriteView> getAllFav(ReportView report){
+       List<Favorite> favorites = em.createNamedQuery(JpaConst.Q_FAV_GET_ALL_REP,Favorite.class)
+               .setParameter(JpaConst.JPQL_PARM_REPORT, ReportConverter.toModel(report))
+               .getResultList();
+       return FavoriteConverter.toViewList(favorites);
+   }
    public List<ReportView> getAllPerPage(int page) {
 
        List<Report> reports = em.createNamedQuery(JpaConst.Q_REP_GET_ALL, Report.class)
@@ -42,6 +65,8 @@ public class ReportService extends ServiceBase{
                .getSingleResult();
        return reports_count;
    }
+
+
    public ReportView findOne(int id) {
        return ReportConverter.toView(findOneInternal(id));
    }

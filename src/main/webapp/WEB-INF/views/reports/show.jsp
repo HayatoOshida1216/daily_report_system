@@ -4,13 +4,17 @@
 <%@ page import="constants.ForwardConst" %>
 
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
+<c:set var="actFav" value="${ForwardConst.ACT_FAV.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commEdt" value="${ForwardConst.CMD_EDIT.getValue()}" />
+<c:set var="commFav" value="${ForwardConst.CMD_FAVORITE.getValue()}" />
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
 
         <h2>日報 詳細ページ</h2>
+
+
 
         <table>
             <tbody>
@@ -37,6 +41,11 @@
                     <fmt:parseDate value="${report.updatedAt}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="updateDay" type="date" />
                     <td><fmt:formatDate value="${updateDay}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                 </tr>
+                <tr>
+                   <th>この日報に押された、いいねの数</th>
+                   <td><c:out value="${favorite}" /></td>
+                </tr>
+
             </tbody>
         </table>
 
@@ -46,8 +55,25 @@
             </p>
         </c:if>
 
-        <p>
-            <a href="<c:url value='?action=${actRep}&command=${commIdx}' />">一覧に戻る</a>
-        </p>
+     <c:choose>
+       <c:when test="${favorite_user == 0 && sessionScope.login_employee.id != report.employee.id}">
+         <form method="POST" action="<c:url value='?action=${actFav}&command=${commFav}' />">
+
+               <c:import url="_favorite.jsp" />
+         </form>
+       </c:when>
+       <c:otherwise>
+       　　<c:if test="${sessionScope.login_employee.id != report.employee.id}">
+             いいね済み
+          </c:if>
+       </c:otherwise>
+     </c:choose>
+
+          <h3>この日報に対して、いいねを押した、従業員</h3>
+         <c:forEach var="favorite" items="${favorites}" varStatus="status">
+
+         <p><c:out value="${favorite.employee.name}" /></p>
+         </c:forEach>
+            <p><a href="<c:url value='?action=${actRep}&command=${commIdx}' />">一覧に戻る</a></p>
     </c:param>
 </c:import>

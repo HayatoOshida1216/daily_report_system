@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.ServletException;
 
 import actions.views.EmployeeView;
+import actions.views.FavoriteView;
 import actions.views.ReportView;
 import constants.AttributeConst;
 import constants.ForwardConst;
@@ -31,6 +32,7 @@ public class ReportAction extends ActionBase{
         List<ReportView> reports = service.getAllPerPage(page);
 
         long reportsCount = service.countAll();
+
 
         putRequestScope(AttributeConst.REPORTS, reports);
         putRequestScope(AttributeConst.REP_COUNT, reportsCount);
@@ -100,15 +102,22 @@ public class ReportAction extends ActionBase{
     }
     public void show() throws ServletException, IOException {
 
+        EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
         ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
+        long countFavorites = service.countAllFavorites(rv);
+        List<FavoriteView> fv = service.getAllFav(rv);
+        long countUser  = service.countFavoriteUser(ev, rv);
 
         if (rv == null) {
 
             forward(ForwardConst.FW_ERR_UNKNOWN);
 
         } else {
-
             putRequestScope(AttributeConst.REPORT, rv);
+            putRequestScope(AttributeConst.FAVORITES,fv);
+            putRequestScope(AttributeConst.EMPLOYEE, ev);
+            putRequestScope(AttributeConst.FAVORITE,countFavorites);
+            putRequestScope(AttributeConst.FAV_USER,countUser);
 
             forward(ForwardConst.FW_REP_SHOW);
         }

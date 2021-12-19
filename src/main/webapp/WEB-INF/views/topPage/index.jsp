@@ -6,6 +6,7 @@
 <c:set var="actTop" value="${ForwardConst.ACT_TOP.getValue()}" />
 <c:set var="actEmp" value="${ForwardConst.ACT_EMP.getValue()}" />
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
+<c:set var="actFav" value="${ForwardConst.ACT_FAV.getValue()}" />
 
 <c:set var="commShow" value="${ForwardConst.CMD_SHOW.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
@@ -27,6 +28,7 @@
                     <th class="report_date">日付</th>
                     <th class="report_title">タイトル</th>
                     <th class="report_action">操作</th>
+
                 </tr>
                 <c:forEach var="report" items="${reports}" varStatus="status">
                     <fmt:parseDate value="${report.reportDate}" pattern="yyyy-MM-dd" var="reportDay" type="date" />
