@@ -5,9 +5,11 @@
 
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
 <c:set var="actFav" value="${ForwardConst.ACT_FAV.getValue()}" />
+<c:set var="actRea" value="${ForwardConst.ACT_REA.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commEdt" value="${ForwardConst.CMD_EDIT.getValue()}" />
 <c:set var="commFav" value="${ForwardConst.CMD_FAVORITE.getValue()}" />
+<c:set var="commRea" value="${ForwardConst.CMD_REA.getValue()}" />
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
@@ -16,7 +18,7 @@
 
 
 
-        <table>
+        <table style="margin-bottom:30px;">
             <tbody>
                 <tr>
                     <th>氏名</th>
@@ -41,10 +43,7 @@
                     <fmt:parseDate value="${report.updatedAt}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="updateDay" type="date" />
                     <td><fmt:formatDate value="${updateDay}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                 </tr>
-                <tr>
-                   <th>この日報に押された、いいねの数</th>
-                   <td><c:out value="${favorite}" /></td>
-                </tr>
+
 
             </tbody>
         </table>
@@ -54,25 +53,23 @@
                 <a href="<c:url value='?action=${actRep}&command=${commEdt}&id=${report.id}' />">この日報を編集する</a>
             </p>
         </c:if>
-
-     <c:choose>
-       <c:when test="${favorite_user == 0 && sessionScope.login_employee.id != report.employee.id}">
-         <form method="POST" action="<c:url value='?action=${actFav}&command=${commFav}' />">
+        <c:choose>
+         <c:when test="${reactions_user_count == 0 && sessionScope.login_employee.id != report.employee.id}">
+         <form method="POST" action="<c:url value='?action=${actRea}&command=${commRea}' />">
 
                <c:import url="_favorite.jsp" />
          </form>
-       </c:when>
-       <c:otherwise>
-       　　<c:if test="${sessionScope.login_employee.id != report.employee.id}">
-             いいね済み
-          </c:if>
-       </c:otherwise>
-     </c:choose>
-
-          <h3>この日報に対して、いいねを押した、従業員</h3>
-         <c:forEach var="favorite" items="${favorites}" varStatus="status">
-
-         <p><c:out value="${favorite.employee.name}" /></p>
+         </c:when>
+         <c:otherwise>
+           <c:if test="${sessionScope.login_employee.id != report.employee.id}">
+              <p><c:out value="${reactions_Type.name}" />済み</p>
+           </c:if>
+         </c:otherwise>
+         </c:choose>
+         <p>この日報に押された<c:out value="${reactions_Type.name}" />の数:<c:out value="${reactions_count}" /></p>
+         <h3>この日報に対して、<c:out value="${reactions_Type.name}" />を押した従業員</h3>
+         <c:forEach var="user" items="${reactions_user}" varStatus="status">
+           <p><c:out value="${user.employee.name}" /></p>
          </c:forEach>
             <p><a href="<c:url value='?action=${actRep}&command=${commIdx}' />">一覧に戻る</a></p>
     </c:param>

@@ -7,26 +7,32 @@ import java.util.List;
 import javax.servlet.ServletException;
 
 import actions.views.EmployeeView;
-import actions.views.FavoriteView;
+import actions.views.ReactionView;
+import actions.views.Reactions_TypeView;
 import actions.views.ReportView;
 import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
 import constants.MessageConst;
+import services.ReactionService;
 import services.ReportService;
-
 public class ReportAction extends ActionBase{
 
     private ReportService service;
+    private ReactionService reaction;
 
     @Override
     public void process() throws ServletException, IOException {
 
         service = new ReportService();
-
+        reaction = new ReactionService();
         invoke();
         service.close();
+        reaction.close();
+
     }
+
+
     public void index() throws ServletException, IOException {
         int page = getPage();
         List<ReportView> reports = service.getAllPerPage(page);
@@ -104,21 +110,23 @@ public class ReportAction extends ActionBase{
 
         EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
         ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
-        long countFavorites = service.countAllFavorites(rv);
-        List<FavoriteView> fv = service.getAllFav(rv);
-        long countUser  = service.countFavoriteUser(ev, rv);
-
+        Reactions_TypeView rt = service.findTwo(1);
+        long countReactions = service.countAllReactions(rv);
+        List<ReactionView> ru = service.getAllReaction(rv);
+        long countUser = service.countReactionUser(ev, rv);
         if (rv == null) {
 
             forward(ForwardConst.FW_ERR_UNKNOWN);
 
         } else {
             putRequestScope(AttributeConst.REPORT, rv);
-            putRequestScope(AttributeConst.FAVORITES,fv);
-            putRequestScope(AttributeConst.EMPLOYEE, ev);
-            putRequestScope(AttributeConst.FAVORITE,countFavorites);
-            putRequestScope(AttributeConst.FAV_USER,countUser);
 
+            putRequestScope(AttributeConst.EMPLOYEE, ev);
+            putRequestScope(AttributeConst.REACTIONS_COUNT,countReactions);
+
+            putRequestScope(AttributeConst.REACTIONS_TYPE,rt);
+            putRequestScope(AttributeConst.REACTIONS_USER,ru);
+            putRequestScope(AttributeConst.REACTIONS_USER_COUNT,countUser);
             forward(ForwardConst.FW_REP_SHOW);
         }
     }
@@ -146,12 +154,17 @@ public class ReportAction extends ActionBase{
         if (checkToken()) {
 
             ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
+            List<ReactionView> re = service.getAllReaction(rv);
+               reaction.destroy(re);
+
 
             rv.setReportDate(toLocalDate(getRequestParam(AttributeConst.REP_DATE)));
             rv.setTitle(getRequestParam(AttributeConst.REP_TITLE));
             rv.setContent(getRequestParam(AttributeConst.REP_CONTENT));
 
             List<String> errors = service.update(rv);
+
+
 
             if (errors.size() > 0) {
 
@@ -169,4 +182,5 @@ public class ReportAction extends ActionBase{
             }
         }
     }
+
 }

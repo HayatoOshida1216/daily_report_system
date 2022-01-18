@@ -35,11 +35,19 @@ public enum AttributeConst {
     REP_TITLE("title"),
     REP_CONTENT("content"),
 
-    FAVORITE("favorite"),
-    FAVORITES("favorites"),
-    FAV_COUNT("favorites_count"),
-    FAV_ID("id"),
-    FAV_USER("favorite_user");
+    REACTION("reaction"),
+    REACTIONS("reactions"),
+    REA_ID("id"),
+
+    REACTIONS_TYPE ("reactions_Type"),
+    REACTIONS_TYPES("reactions_Types"),
+    RET_NAME("name"),
+    RET_ID("id"),
+
+    REACTIONS_COUNT("reactions_count"),
+    REACTIONS_USER("reactions_user"),
+    REACTIONS_USER_COUNT("reactions_user_count");
+
 
     private final String text;
     private final Integer i;

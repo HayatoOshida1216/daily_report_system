@@ -5,12 +5,15 @@ import java.util.List;
 
 import actions.views.EmployeeConverter;
 import actions.views.EmployeeView;
-import actions.views.FavoriteConverter;
-import actions.views.FavoriteView;
+import actions.views.ReactionConverter;
+import actions.views.ReactionView;
+import actions.views.Reactions_TypeConverter;
+import actions.views.Reactions_TypeView;
 import actions.views.ReportConverter;
 import actions.views.ReportView;
 import constants.JpaConst;
-import models.Favorite;
+import models.Reaction;
+import models.Reactions_Type;
 import models.Report;
 import models.validators.ReportValidator;
 
@@ -32,26 +35,8 @@ public class ReportService extends ServiceBase{
 
        return count;
    }
-   public long countAllFavorites(ReportView report) {
-       long count = (long) em.createNamedQuery(JpaConst.Q_FAV_COUNT_ALL_REP,Long.class)
-               .setParameter(JpaConst.JPQL_PARM_REPORT, ReportConverter.toModel(report))
-               .getSingleResult();
-       return count;
-   }
-   public long countFavoriteUser(EmployeeView employee, ReportView report) {
 
-       long count = (long) em.createNamedQuery(JpaConst.Q_FAV_COUNT_ALL_FAV,Long.class)
-               .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(employee))
-               .setParameter(JpaConst.JPQL_PARM_REPORT, ReportConverter.toModel(report))
-               .getSingleResult();
-       return count;
-   }
-   public List<FavoriteView> getAllFav(ReportView report){
-       List<Favorite> favorites = em.createNamedQuery(JpaConst.Q_FAV_GET_ALL_REP,Favorite.class)
-               .setParameter(JpaConst.JPQL_PARM_REPORT, ReportConverter.toModel(report))
-               .getResultList();
-       return FavoriteConverter.toViewList(favorites);
-   }
+
    public List<ReportView> getAllPerPage(int page) {
 
        List<Report> reports = em.createNamedQuery(JpaConst.Q_REP_GET_ALL, Report.class)
@@ -70,6 +55,27 @@ public class ReportService extends ServiceBase{
    public ReportView findOne(int id) {
        return ReportConverter.toView(findOneInternal(id));
    }
+
+   public Reactions_TypeView findTwo(int id) {
+       Reactions_Type e = findTwoInternal(id);
+       return Reactions_TypeConverter.toView(e);
+   }
+   public Reactions_Type findTwoInternal(int id) {
+       Reactions_Type e = em.find(Reactions_Type.class, id);
+
+       return e;
+   }
+   public ReactionView findFinal(int id) {
+       Reaction e = findFinalInternal(id);
+       return ReactionConverter.toView(e);
+   }
+   public Reaction findFinalInternal(int id) {
+       Reaction e = em.find(Reaction.class, id);
+
+       return e;
+   }
+
+
    public List<String> create(ReportView rv) {
        List<String> errors = ReportValidator.validate(rv);
        if (errors.size() == 0) {
@@ -80,6 +86,7 @@ public class ReportService extends ServiceBase{
        }
        return errors;
    }
+
    public List<String> update(ReportView rv) {
 
        List<String> errors = ReportValidator.validate(rv);
@@ -87,7 +94,6 @@ public class ReportService extends ServiceBase{
        if (errors.size() == 0) {
            LocalDateTime ldt = LocalDateTime.now();
            rv.setUpdatedAt(ldt);
-
            updateInternal(rv);
        }
        return errors;
@@ -112,6 +118,25 @@ public class ReportService extends ServiceBase{
 
    }
 
+   public long countAllReactions(ReportView report) {
+       long count = (long) em.createNamedQuery(JpaConst.Q_REA_COUNT_ALL_REP,Long.class)
+               .setParameter(JpaConst.JPQL_PARM_REPORT, ReportConverter.toModel(report))
+               .getSingleResult();
+       return count;
+   }
+   public List<ReactionView> getAllReaction(ReportView report){
+       List<Reaction> reactions = em.createNamedQuery(JpaConst.Q_REA_GET_ALL_REP,Reaction.class)
+               .setParameter(JpaConst.JPQL_PARM_REPORT,ReportConverter.toModel(report))
+               .getResultList();
+       return ReactionConverter.toViewList(reactions);
+   }
+   public long countReactionUser(EmployeeView employee, ReportView report) {
+       long count = (long) em.createNamedQuery(JpaConst.Q_REA_COUNT_USER,Long.class)
+               .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(employee))
+               .setParameter(JpaConst.JPQL_PARM_REPORT, ReportConverter.toModel(report))
+               .getSingleResult();
+       return count;
+   }
 
 
 
