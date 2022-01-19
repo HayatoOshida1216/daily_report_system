@@ -65,15 +65,7 @@ public class ReportService extends ServiceBase{
 
        return e;
    }
-   public ReactionView findFinal(int id) {
-       Reaction e = findFinalInternal(id);
-       return ReactionConverter.toView(e);
-   }
-   public Reaction findFinalInternal(int id) {
-       Reaction e = em.find(Reaction.class, id);
 
-       return e;
-   }
 
 
    public List<String> create(ReportView rv) {
