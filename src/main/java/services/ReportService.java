@@ -67,7 +67,6 @@ public class ReportService extends ServiceBase{
    }
 
 
-
    public List<String> create(ReportView rv) {
        List<String> errors = ReportValidator.validate(rv);
        if (errors.size() == 0) {
